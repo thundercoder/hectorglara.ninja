@@ -9,7 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "nodejs-512.png"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -19,9 +20,29 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "./assets/bootstrap/css/bootstrap.min.css",
+        "./assets/css/font-awesome.min.css",
+        "./assets/css/animate.css",
+        "./assets/css/magnific-popup.css",
+        "./assets/css/style.css",
+        "./assets/css/responsive.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "assets/js/jquery.js",
+        "assets/bootstrap/js/bootstrap.min.js",
+        "assets/js/jquery.stellar.min.js",
+        "assets/js/jquery.sticky.js",
+        "assets/js/smoothscroll.js",
+        "assets/js/wow.min.js",
+        "assets/js/jquery.countTo.js",
+        "assets/js/jquery.inview.min.js",
+        "assets/js/jquery.easypiechart.js",
+        "assets/js/jquery.shuffle.min.js",
+        "assets/js/jquery.magnific-popup.min.js",
+        "assets/js/jquery.fitvids.js",
+        "assets/js/scripts.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
