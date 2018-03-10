@@ -1,18 +1,28 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-
+import { ContactFormComponent } from './components/contact-form/contact-form.component';
+import { NinjaService } from './services/ninja.service';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ContactFormComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    RecaptchaModule.forRoot()
   ],
-  providers: [],
+  providers: [NinjaService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+
+}
