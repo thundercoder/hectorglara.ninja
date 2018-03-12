@@ -33,7 +33,7 @@ app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 
 // Point static path to dist
-app.use(_express2.default.static('dist'));
+app.use(_express2.default.static(_path2.default.join(__dirname, 'dist')));
 
 // Set our api routes
 app.use('/api', _api2.default);
