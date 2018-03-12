@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "node dist/server",
-    "build": "ng build && npx babel server.js --out-dir dist && npx babel server -d dist/server",
+    "start": "node dist/bin/server",
+    "build": "ng build && npx babel app.js --out-dir dist && npx babel server -d dist/server && npx babel bin -d dist/bin && node dist/bin/server",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -26,12 +26,16 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "core-js": "^2.4.1",
+    "debug": "^3.1.0",
     "express": "^4.16.2",
     "i": "^0.3.6",
+    "morgan": "^1.9.0",
     "ng-recaptcha": "^3.0.3",
     "nodemailer": "^4.6.2",
     "rxjs": "^5.5.6",
+    "serve-favicon": "^2.4.5",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {
