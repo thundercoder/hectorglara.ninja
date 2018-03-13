@@ -35,8 +35,16 @@ app.get('/*', (req, res) => {
 const port = process.env.PORT || '3000';
 app.set('port', port);
 
-// catch 404 and forward to error handler
+//Force to use https
+function requireHTTPS(req, res, next) {
+  if (!req.secure) {
+    return res.redirect('https://' + req.get('host') + req.url);
+  }
+}
 
+app.use(requireHTTPS);
+
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   let err = new Error('Not Found');
   err.status = 404;
