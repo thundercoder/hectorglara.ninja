@@ -17,7 +17,10 @@ function getDogs() {
 
 async function verifyRecaptcha(secretKey, tokenResponse){
   const res = await axios.post('https://www.google.com/recaptcha/api/siteverify', JSON.stringify({secret: secretKey, response: tokenResponse}));
-  return res.json();
+
+  console.log(res);
+
+  return res;
 }
 
 router.get('/dogs', async (req, res) => {

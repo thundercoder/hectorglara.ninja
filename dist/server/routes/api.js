@@ -28,9 +28,13 @@ var verifyRecaptcha = function () {
 
           case 2:
             res = _context.sent;
-            return _context.abrupt('return', res.json());
 
-          case 4:
+
+            console.log(res);
+
+            return _context.abrupt('return', res);
+
+          case 5:
           case 'end':
             return _context.stop();
         }
