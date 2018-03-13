@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node dist/bin/server",
-    "build": "ng build && npx babel app.js --out-dir dist && npx babel server -d dist/server && npx babel bin -d dist/bin && node dist/bin/server",
+    "build": "ng build --prod && npx babel app.js --out-dir dist && npx babel server -d dist/server && npx babel bin -d dist/bin",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
