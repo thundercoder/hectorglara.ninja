@@ -8,33 +8,8 @@ router.get('/test-json', (req, res) => {
   res.status(200).send(JSON.stringify({a:1, b:2}));
 });
 
-function getDogs() {
-  return new Promise (resolve => resolve({
-    a: 1,
-    b: [2,3,4,5]
-  }));
-}
-
-async function verifyRecaptcha(secretKey, tokenResponse){
-  const res = await axios.post('https://www.google.com/recaptcha/api/siteverify', JSON.stringify({secret: secretKey, response: tokenResponse}));
-
-  console.log(res);
-
-  return res.data;
-}
-
-router.get('/dogs', async (req, res) => {
-  console.log('Start');
-
-  const result = await getDogs();
-
-  res.status(200).send(result);
-
-  console.log('Finish');
-});
-
 function sendEmail(name, email, subject, message){
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     nodemailer.createTestAccount((err, account) => {
       // create reusable transporter object using the default SMTP transport
       const transporter = nodemailer.createTransport({
@@ -57,9 +32,9 @@ function sendEmail(name, email, subject, message){
       // send mail with defined transport object
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          reject(error);
+          console.log(error);
         }
-        resolve(true);
+        resolve(void);
 
         //console.log('Message sent: %s', info.messageId);
         // Preview only available when sending through an Ethereal account
@@ -75,19 +50,20 @@ function sendEmail(name, email, subject, message){
 // Send email through gmail
 router.post('/send-email', async (req, res, next) => {
 
-  let isHuman = await verifyRecaptcha(process.env['APPSETTING_SECRETKEYGOOGLE'], req.body.captchaResponse);
+  let pass = false;
 
-  if (!isHuman.success)
-    next('Mmm, you\'re not human. :P');
+  axios
+    .post('https://www.google.com/recaptcha/api/siteverify', JSON.stringify({secret: process.env['APPSETTING_SECRETKEYGOOGLE'], response: req.body.captchaResponse}))
+    .then(response => {
+      pass = response.data['success'];
+      console.log(response.data);
+    })
+    .catch(err => next('Mmm, you\'re not human. :P'));
 
-  let messageResponse = await sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
+  if (pass)
+    await sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
 
-  let response = {
-    apiGoogle: isHuman,
-    sendEmailService: messageResponse
-  }
-
-  res.send(response);
+  res.send(true);
 });
 
 module.exports = router;
