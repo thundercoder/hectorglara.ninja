@@ -32,7 +32,7 @@ var verifyRecaptcha = function () {
 
             console.log(res);
 
-            return _context.abrupt('return', JSON.parse(res));
+            return _context.abrupt('return', res.data);
 
           case 5:
           case 'end':
