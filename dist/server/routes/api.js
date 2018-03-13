@@ -45,10 +45,6 @@ function getDogs() {
   });
 }
 
-function verifyRecaptcha(secretKey, tokenResponse) {
-  return _axios2.default.post('https://www.google.com/recaptcha/api/siteverify', { secret: secretKey, response: tokenResponse });
-}
-
 router.get('/dogs', function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
     var result;
@@ -130,7 +126,7 @@ router.post('/send-email', function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return verifyRecaptcha(process.env['APPSETTING_SECRETKEYGOOGLE'], req.body.captchaResponse);
+            return _axios2.default.post('https://www.google.com/recaptcha/api/siteverify', { secret: process.env['APPSETTING_SECRETKEYGOOGLE'], response: req.body.captchaResponse });
 
           case 2:
             isHuman = _context2.sent;

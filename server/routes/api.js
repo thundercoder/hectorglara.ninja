@@ -15,10 +15,6 @@ function getDogs() {
   }));
 }
 
-function verifyRecaptcha(secretKey, tokenResponse){
-  return axios.post('https://www.google.com/recaptcha/api/siteverify', {secret: secretKey, response: tokenResponse})
-}
-
 router.get('/dogs', async (req, res) => {
   console.log('Start');
 
@@ -71,7 +67,7 @@ function sendEmail(name, email, subject, message){
 // Send email through gmail
 router.post('/send-email', async (req, res, next) => {
 
-  let isHuman = await verifyRecaptcha(process.env['APPSETTING_SECRETKEYGOOGLE'], req.body.captchaResponse);
+  let isHuman = await axios.post('https://www.google.com/recaptcha/api/siteverify', {secret: process.env['APPSETTING_SECRETKEYGOOGLE'], response: req.body.captchaResponse});
 
   if (!isHuman.success)
     next('Mmm, you\'re not human. :P');
@@ -81,7 +77,7 @@ router.post('/send-email', async (req, res, next) => {
   let response = {
     apiGoogle: isHuman,
     sendEmailService: messageResponse
-  }
+  };
 
   res.send(response);
 });
