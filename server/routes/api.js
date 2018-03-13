@@ -1,5 +1,6 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
+import axios from 'axios';
 
 const router = express.Router();
 
@@ -14,6 +15,10 @@ function getDogs() {
   }));
 }
 
+function verifyRecaptcha(secretKey, tokenResponse){
+  return axios.post('https://www.google.com/recaptcha/api/siteverify', {secret: secretKey, response: tokenResponse})
+}
+
 router.get('/dogs', async (req, res) => {
   console.log('Start');
 
@@ -25,17 +30,20 @@ router.get('/dogs', async (req, res) => {
 });
 
 // Send email through gmail
-router.post('/send-email', (req, res) => {
+router.post('/send-email', async (req, res, next) => {
 
-  console.log(req.body);
+  const isHuman = await verifyRecaptcha(process.env.SECRETKEYGOOGLE, req.body.captchaResponse);
+
+  if (!isHuman.success)
+    next('Mmm, you\'re not human. :P');
 
   nodemailer.createTestAccount((err, account) => {
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'hectorglara@gmail.com',
-        pass: 'Google^*0619=25'
+        user: process.env.GMAILEMAIL,
+        pass: process.env.GMAILPASS
       }
     });
 

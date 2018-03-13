@@ -15,6 +15,7 @@ export class NinjaService {
 
   private handleError(error: any, type: string, request?: any): Promise<any> {
     console.error('An error occurred: ', error);
+    alert(error.message);
     return Promise.reject(error.message || error);
   }
 

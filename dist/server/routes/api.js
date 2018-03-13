@@ -24,6 +24,10 @@ var _nodemailer = require('nodemailer');
 
 var _nodemailer2 = _interopRequireDefault(_nodemailer);
 
+var _axios = require('axios');
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -39,6 +43,10 @@ function getDogs() {
       b: [2, 3, 4, 5]
     });
   });
+}
+
+function verifyRecaptcha(secretKey, tokenResponse) {
+  return _axios2.default.post('https://www.google.com/recaptcha/api/siteverify', { secret: secretKey, response: tokenResponse });
 }
 
 router.get('/dogs', function () {
@@ -75,44 +83,68 @@ router.get('/dogs', function () {
 }());
 
 // Send email through gmail
-router.post('/send-email', function (req, res) {
+router.post('/send-email', function () {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(req, res, next) {
+    var isHuman;
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return verifyRecaptcha(process.env.SECRETKEYGOOGLE, req.body.captchaResponse);
 
-  console.log(req.body);
+          case 2:
+            isHuman = _context2.sent;
 
-  _nodemailer2.default.createTestAccount(function (err, account) {
-    // create reusable transporter object using the default SMTP transport
-    var transporter = _nodemailer2.default.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'hectorglara@gmail.com',
-        pass: 'Google^*0619=25'
+
+            if (!isHuman.success) next('Mmm, you\'re not human. :P');
+
+            _nodemailer2.default.createTestAccount(function (err, account) {
+              // create reusable transporter object using the default SMTP transport
+              var transporter = _nodemailer2.default.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: process.env.GMAILEMAIL,
+                  pass: process.env.GMAILPASS
+                }
+              });
+
+              // setup email data with unicode symbols
+              var mailOptions = {
+                from: req.body.name + ' "\uD83D\uDC7B" <' + req.body.email + '>', // sender address
+                to: 'hectorglara@gmail.com; hectorglara@outlook.com', // list of receivers
+                subject: req.body.subject, // Subject line
+                text: req.body.message // plain text body
+                //html: '<b>Hello world?</b>' // html body
+              };
+
+              // send mail with defined transport object
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  return console.log(error);
+                }
+                console.log('Message sent: %s', info.messageId);
+                // Preview only available when sending through an Ethereal account
+                console.log('Preview URL: %s', _nodemailer2.default.getTestMessageUrl(info));
+
+                // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+                // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+              });
+            });
+
+            res.send('api works');
+
+          case 6:
+          case 'end':
+            return _context2.stop();
+        }
       }
-    });
+    }, _callee2, undefined);
+  }));
 
-    // setup email data with unicode symbols
-    var mailOptions = {
-      from: req.body.name + ' "\uD83D\uDC7B" <' + req.body.email + '>', // sender address
-      to: 'hectorglara@gmail.com; hectorglara@outlook.com', // list of receivers
-      subject: req.body.subject, // Subject line
-      text: req.body.message // plain text body
-      //html: '<b>Hello world?</b>' // html body
-    };
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        return console.log(error);
-      }
-      console.log('Message sent: %s', info.messageId);
-      // Preview only available when sending through an Ethereal account
-      console.log('Preview URL: %s', _nodemailer2.default.getTestMessageUrl(info));
-
-      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-      // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    });
-  });
-
-  res.send('api works');
-});
+  return function (_x3, _x4, _x5) {
+    return _ref2.apply(this, arguments);
+  };
+}());
 
 module.exports = router;

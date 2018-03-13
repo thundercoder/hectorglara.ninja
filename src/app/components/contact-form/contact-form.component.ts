@@ -24,6 +24,7 @@ export class ContactFormComponent implements OnInit {
   }
 
   resolved(captchaResponse: string) {
+    this.contact.captchaResponse = captchaResponse;
     console.log(`Resolved captcha with response ${captchaResponse}:`);
   }
 
