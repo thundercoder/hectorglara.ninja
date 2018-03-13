@@ -34,7 +34,7 @@ function sendEmail(name, email, subject, message){
         if (error) {
           console.log(error);
         }
-        resolve(void);
+        resolve();
 
         //console.log('Message sent: %s', info.messageId);
         // Preview only available when sending through an Ethereal account
