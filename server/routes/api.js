@@ -36,8 +36,8 @@ function sendEmail(name, email, subject, message){
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.GMAILEMAIL,
-          pass: process.env.GMAILPASS
+          user: process.env['APPSETTING_GMAILEMAIL'],
+          pass: process.env['APPSETTING_GMAILPASS']
         }
       });
 
@@ -71,7 +71,7 @@ function sendEmail(name, email, subject, message){
 // Send email through gmail
 router.post('/send-email', async (req, res, next) => {
 
-  let isHuman = await verifyRecaptcha(process.env.SECRETKEYGOOGLE, req.body.captchaResponse);
+  let isHuman = await verifyRecaptcha(process.env['APPSETTING_SECRETKEYGOOGLE'], req.body.captchaResponse);
 
   if (!isHuman.success)
     next('Mmm, you\'re not human. :P');

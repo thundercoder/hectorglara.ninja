@@ -89,8 +89,8 @@ function sendEmail(name, email, subject, message) {
       var transporter = _nodemailer2.default.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.GMAILEMAIL,
-          pass: process.env.GMAILPASS
+          user: process.env['APPSETTING_GMAILEMAIL'],
+          pass: process.env['APPSETTING_GMAILPASS']
         }
       });
 
@@ -130,7 +130,7 @@ router.post('/send-email', function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return verifyRecaptcha(process.env.SECRETKEYGOOGLE, req.body.captchaResponse);
+            return verifyRecaptcha(process.env['APPSETTING_SECRETKEYGOOGLE'], req.body.captchaResponse);
 
           case 2:
             isHuman = _context2.sent;
