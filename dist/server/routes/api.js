@@ -82,10 +82,49 @@ router.get('/dogs', function () {
   };
 }());
 
+function sendEmail(name, email, subject, message) {
+  return new _promise2.default(function (resolve, reject) {
+    _nodemailer2.default.createTestAccount(function (err, account) {
+      // create reusable transporter object using the default SMTP transport
+      var transporter = _nodemailer2.default.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAILEMAIL,
+          pass: process.env.GMAILPASS
+        }
+      });
+
+      // setup email data with unicode symbols
+      var mailOptions = {
+        from: name + ' "\uD83D\uDC7B" <' + email + '>', // sender address
+        to: 'hectorglara@gmail.com; hectorglara@outlook.com', // list of receivers
+        subject: subject, // Subject line
+        text: message // plain text body
+        //html: '<b>Hello world?</b>' // html body
+      };
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          reject(error);
+        }
+        resolve(true);
+
+        console.log('Message sent: %s', info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log('Preview URL: %s', _nodemailer2.default.getTestMessageUrl(info));
+
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      });
+    });
+  });
+}
+
 // Send email through gmail
 router.post('/send-email', function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(req, res, next) {
-    var isHuman;
+    var isHuman, messageResponse, response;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -99,42 +138,20 @@ router.post('/send-email', function () {
 
             if (!isHuman.success) next('Mmm, you\'re not human. :P');
 
-            _nodemailer2.default.createTestAccount(function (err, account) {
-              // create reusable transporter object using the default SMTP transport
-              var transporter = _nodemailer2.default.createTransport({
-                service: 'gmail',
-                auth: {
-                  user: process.env.GMAILEMAIL,
-                  pass: process.env.GMAILPASS
-                }
-              });
-
-              // setup email data with unicode symbols
-              var mailOptions = {
-                from: req.body.name + ' "\uD83D\uDC7B" <' + req.body.email + '>', // sender address
-                to: 'hectorglara@gmail.com; hectorglara@outlook.com', // list of receivers
-                subject: req.body.subject, // Subject line
-                text: req.body.message // plain text body
-                //html: '<b>Hello world?</b>' // html body
-              };
-
-              // send mail with defined transport object
-              transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                  return console.log(error);
-                }
-                console.log('Message sent: %s', info.messageId);
-                // Preview only available when sending through an Ethereal account
-                console.log('Preview URL: %s', _nodemailer2.default.getTestMessageUrl(info));
-
-                // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-                // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-              });
-            });
-
-            res.send('api works');
+            _context2.next = 6;
+            return sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
 
           case 6:
+            messageResponse = _context2.sent;
+            response = {
+              apiGoogle: isHuman,
+              sendEmailService: messageResponse
+            };
+
+
+            res.send(response);
+
+          case 9:
           case 'end':
             return _context2.stop();
         }
