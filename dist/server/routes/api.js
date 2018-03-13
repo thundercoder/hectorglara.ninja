@@ -78,12 +78,13 @@ function sendEmail(name, email, subject, message) {
 // Send email through gmail
 router.post('/send-email', function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res, next) {
-    var pass;
+    var pass, emailResponse;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             pass = false;
+            emailResponse = false;
 
 
             _axios2.default.post('https://www.google.com/recaptcha/api/siteverify', (0, _stringify2.default)({ secret: process.env['APPSETTING_SECRETKEYGOOGLE'], response: req.body.captchaResponse })).then(function (response) {
@@ -94,18 +95,21 @@ router.post('/send-email', function () {
             });
 
             if (!pass) {
-              _context.next = 5;
+              _context.next = 7;
               break;
             }
 
-            _context.next = 5;
+            _context.next = 6;
             return sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
 
-          case 5:
-
-            res.send(true);
-
           case 6:
+            emailResponse = _context.sent;
+
+          case 7:
+
+            res.status(200).send({ ok: pass && emailResponse });
+
+          case 8:
           case 'end':
             return _context.stop();
         }

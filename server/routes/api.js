@@ -51,6 +51,7 @@ function sendEmail(name, email, subject, message){
 router.post('/send-email', async (req, res, next) => {
 
   let pass = false;
+  let emailResponse = false;
 
   axios
     .post('https://www.google.com/recaptcha/api/siteverify', JSON.stringify({secret: process.env['APPSETTING_SECRETKEYGOOGLE'], response: req.body.captchaResponse}))
@@ -61,9 +62,9 @@ router.post('/send-email', async (req, res, next) => {
     .catch(err => next('Mmm, you\'re not human. :P'));
 
   if (pass)
-    await sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
+    emailResponse = await sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
 
-  res.send(true);
+  res.status(200).send({ ok: pass && emailResponse });
 });
 
 module.exports = router;
