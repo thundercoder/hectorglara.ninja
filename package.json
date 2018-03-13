@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node dist/bin/server",
-    "build": "ng build --prod && npx babel app.js --out-dir dist && npx babel server -d dist/server && npx babel bin -d dist/bin",
+    "build": "ng build --prod && gulp && npx babel app.js --out-dir dist && npx babel server -d dist/server && npx babel bin -d dist/bin",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -49,6 +49,9 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
     "codelyzer": "^4.0.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-filter": "^5.1.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~2.0.0",

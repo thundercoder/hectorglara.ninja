@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 import { ContactModel } from '../models/contact-model';
@@ -19,7 +19,12 @@ export class NinjaService {
   }
 
   sendContactRequest(contactModel: ContactModel) {
-    return this.http.post(`${environment.restApi}/send-email`, contactModel)
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json; charset=utf-8');
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
+
+    return this.http.post(`${environment.restApi}/send-email`, contactModel, { headers: headers })
       .toPromise()
       .then(response => response)
       .catch(err => this.handleError(err, 'GET'));
