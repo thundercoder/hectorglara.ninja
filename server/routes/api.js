@@ -20,7 +20,7 @@ async function verifyRecaptcha(secretKey, tokenResponse){
 
   console.log(res);
 
-  return res;
+  return JSON.parse(res);
 }
 
 router.get('/dogs', async (req, res) => {
