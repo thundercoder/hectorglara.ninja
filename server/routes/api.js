@@ -40,9 +40,13 @@ function sendEmail(name, email, subject, message){
 }
 
 async function verifyToken(captchaResponse) {
+
+  console.info('secret key', process.env['APPSETTING_SECRETKEYGOOGLE']);
+  console.info(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env['APPSETTING_SECRETKEYGOOGLE']}&response=${captchaResponse}`);
+
   let opts = {
     method: 'post',
-    url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env['APPSETTING_SECRETKEYGOOGLE']}&response${captchaResponse}`
+    url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env['APPSETTING_SECRETKEYGOOGLE']}&response=${captchaResponse}`
   };
 
   return await axios(opts);

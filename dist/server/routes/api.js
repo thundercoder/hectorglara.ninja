@@ -23,17 +23,21 @@ var verifyToken = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+
+            console.info('secret key', process.env['APPSETTING_SECRETKEYGOOGLE']);
+            console.info('https://www.google.com/recaptcha/api/siteverify?secret=' + process.env['APPSETTING_SECRETKEYGOOGLE'] + '&response=' + captchaResponse);
+
             opts = {
               method: 'post',
-              url: 'https://www.google.com/recaptcha/api/siteverify?secret=' + process.env['APPSETTING_SECRETKEYGOOGLE'] + '&response' + captchaResponse
+              url: 'https://www.google.com/recaptcha/api/siteverify?secret=' + process.env['APPSETTING_SECRETKEYGOOGLE'] + '&response=' + captchaResponse
             };
-            _context.next = 3;
+            _context.next = 5;
             return (0, _axios2.default)(opts);
 
-          case 3:
+          case 5:
             return _context.abrupt('return', _context.sent);
 
-          case 4:
+          case 6:
           case 'end':
             return _context.stop();
         }
