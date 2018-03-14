@@ -25,12 +25,7 @@ var verifyToken = function () {
           case 0:
             opts = {
               method: 'post',
-              url: 'https://www.google.com/recaptcha/api/siteverify',
-              data: {
-                secret: process.env['APPSETTING_SECRETKEYGOOGLE'],
-                response: captchaResponse
-              },
-              headers: { 'ContentType': 'application/json' }
+              url: 'https://www.google.com/recaptcha/api/siteverify?secret=' + process.env['APPSETTING_SECRETKEYGOOGLE'] + '&response' + captchaResponse
             };
             _context.next = 3;
             return (0, _axios2.default)(opts);
@@ -80,8 +75,8 @@ function sendEmail(name, email, subject, message) {
   var transporter = _nodemailer2.default.createTransport({
     service: 'gmail',
     auth: {
-      user: 'hectorglara@gmail.com' || process.env['APPSETTING_GMAILEMAIL'],
-      pass: 'Google^*0619=25' || process.env['APPSETTING_GMAILPASS']
+      user: process.env['APPSETTING_GMAILEMAIL'],
+      pass: process.env['APPSETTING_GMAILPASS']
     }
   });
 
@@ -130,25 +125,28 @@ router.post('/send-email', [(0, _check.check)('name').isLength({ min: 1 }).withM
             pass = _context2.sent;
             emailResponse = false;
 
+
+            console.log(pass.data.success);
+
             if (!pass.data.success) {
-              _context2.next = 14;
+              _context2.next = 15;
               break;
             }
 
-            _context2.next = 10;
+            _context2.next = 11;
             return sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
 
-          case 10:
+          case 11:
             emailResponse = _context2.sent;
 
             res.status(200).send({ ok: pass && emailResponse });
-            _context2.next = 15;
+            _context2.next = 16;
             break;
 
-          case 14:
+          case 15:
             res.status(400).send('Mmm, you\'re not human.');
 
-          case 15:
+          case 16:
           case 'end':
             return _context2.stop();
         }

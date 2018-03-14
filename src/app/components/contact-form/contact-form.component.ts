@@ -22,7 +22,7 @@ export class ContactFormComponent implements OnInit {
 
   sendRequest() {
     this.ninjaService.sendContactRequest(this.contact)
-      .then(success => alert('nice'));
+      .then(success => alert('You\'re contact message has been sent.'));
   }
 
   resolved(captchaResponse: string) {

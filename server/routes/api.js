@@ -13,8 +13,8 @@ function sendEmail(name, email, subject, message){
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'hectorglara@gmail.com' || process.env['APPSETTING_GMAILEMAIL'],
-      pass: 'Google^*0619=25' || process.env['APPSETTING_GMAILPASS']
+      user: process.env['APPSETTING_GMAILEMAIL'],
+      pass: process.env['APPSETTING_GMAILPASS']
     }
   });
 
@@ -42,12 +42,7 @@ function sendEmail(name, email, subject, message){
 async function verifyToken(captchaResponse) {
   let opts = {
     method: 'post',
-    url: 'https://www.google.com/recaptcha/api/siteverify',
-    data: {
-      secret: process.env['APPSETTING_SECRETKEYGOOGLE'],
-      response: captchaResponse
-    },
-    headers: { 'ContentType': 'application/json' }
+    url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env['APPSETTING_SECRETKEYGOOGLE']}&response${captchaResponse}`
   };
 
   return await axios(opts);
@@ -83,6 +78,8 @@ router.post('/send-email', [
 
   let pass = await verifyToken(req.body.captchaResponse);
   let emailResponse = false;
+
+  console.log(pass.data.success);
 
   if (pass.data.success) {
     emailResponse = await sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
