@@ -20,7 +20,7 @@
     <textarea class="form-control" rows="5" [(ngModel)]="contact.message" [ngModelOptions]="{standalone: true}"></textarea>
   </div>
 
-  <re-captcha name="capcha" (resolved)="resolved($event)" siteKey="6Ld7ohkUAAAAADa-62di3UNh6yHe-XbA2HSngtQb"></re-captcha>
+  <re-captcha #reCaptchaRef (resolved)="resolved($event)" siteKey="6Ld7ohkUAAAAADa-62di3UNh6yHe-XbA2HSngtQb"></re-captcha>
 
-  <button type="button" [disabled]="!declarativeForm.valid"  (click)="sendRequest()" class="btn btn-primary">Send Message</button>
+  <button [hidden]="submitButton" type="button" [disabled]="!declarativeForm.valid"  (click)="sendRequest()" class="btn btn-primary">Send Message</button>
 </form>

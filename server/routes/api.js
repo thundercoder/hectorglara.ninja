@@ -1,6 +1,7 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import axios from 'axios';
+import { check, validationResult } from 'express-validator/check';
 
 const router = express.Router();
 
@@ -9,62 +10,86 @@ router.get('/test-json', (req, res) => {
 });
 
 function sendEmail(name, email, subject, message){
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'hectorglara@gmail.com' || process.env['APPSETTING_GMAILEMAIL'],
+      pass: 'Google^*0619=25' || process.env['APPSETTING_GMAILPASS']
+    }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: `${name} "👻" <${email}>`, // sender address
+    to: 'hectorglara@gmail.com; hectorglara@outlook.com', // list of receivers
+    subject: subject, // Subject line
+    text: message // plain text body
+    //html: '<b>Hello world?</b>' // html body
+  };
+
   return new Promise((resolve) => {
-    nodemailer.createTestAccount((err, account) => {
-      // create reusable transporter object using the default SMTP transport
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env['APPSETTING_GMAILEMAIL'],
-          pass: process.env['APPSETTING_GMAILPASS']
-        }
-      });
-
-      // setup email data with unicode symbols
-      let mailOptions = {
-        from: `${name} "👻" <${email}>`, // sender address
-        to: 'hectorglara@gmail.com; hectorglara@outlook.com', // list of receivers
-        subject: subject, // Subject line
-        text: message // plain text body
-        //html: '<b>Hello world?</b>' // html body
-      };
-
-      // send mail with defined transport object
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        }
-        resolve();
-
-        //console.log('Message sent: %s', info.messageId);
-        // Preview only available when sending through an Ethereal account
-        //console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-      });
+  // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      }
+      resolve(true);
     });
-  })
+  });
+}
+
+async function verifyToken(captchaResponse) {
+  let opts = {
+    method: 'post',
+    url: 'https://www.google.com/recaptcha/api/siteverify',
+    data: {
+      secret: process.env['APPSETTING_SECRETKEYGOOGLE'],
+      response: captchaResponse
+    },
+    headers: { 'ContentType': 'application/json' }
+  };
+
+  return await axios(opts);
 }
 
 // Send email through gmail
-router.post('/send-email', async (req, res, next) => {
+router.post('/send-email', [
+  check('name')
+    .isLength({ min: 1})
+    .withMessage('Name is required.'),
 
-  let pass = false;
+  check('email')
+    .isLength({ min: 1})
+    .withMessage('Email is required.'),
+
+  check('email')
+    .isEmail()
+    .withMessage('Email must be valid.'),
+
+  check('subject')
+    .isLength({ min: 1})
+    .withMessage('Subject is required.'),
+
+  check('message')
+    .isLength({ min: 1})
+    .withMessage('Subject is required.')
+
+], async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json( errors.mapped() );
+  }
+
+  let pass = await verifyToken(req.body.captchaResponse);
   let emailResponse = false;
 
-  axios
-    .post('https://www.google.com/recaptcha/api/siteverify', JSON.stringify({secret: process.env['APPSETTING_SECRETKEYGOOGLE'], response: req.body.captchaResponse}))
-    .then(response => {
-      pass = response.data['success'];
-      console.log(response.data);
-    })
-    .catch(err => next('Mmm, you\'re not human. :P'));
-
-  if (pass)
+  if (pass.data.success) {
     emailResponse = await sendEmail(req.body.name, req.body.email, req.body.subject, req.body.message);
-
-  res.status(200).send({ ok: pass && emailResponse });
+    res.status(200).send({ ok: (pass && emailResponse) });
+  }
+  else
+    res.status(400).send('Mmm, you\'re not human.');
 });
 
 module.exports = router;
