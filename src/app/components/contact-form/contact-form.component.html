@@ -21,5 +21,5 @@
 
   <re-captcha #reCaptchaRef (resolved)="resolved($event)" siteKey="6Ld7ohkUAAAAADa-62di3UNh6yHe-XbA2HSngtQb"></re-captcha>
 
-  <button [hidden]="submitButton" type="button" (click)="sendRequest()" class="btn btn-primary">Send Message</button>
+  <button *ngIf="submitButton" type="button" (click)="sendRequest()" class="btn btn-primary">Send Message</button>
 </form>

@@ -13,7 +13,7 @@ export class ContactFormComponent implements OnInit {
 
   @ViewChild('reCaptchaRef') reCaptcha: RecaptchaComponent;
   contact = new ContactModel();
-  submitButton: boolean = true;
+  submitButton: boolean = false;
 
   constructor(private ninjaService: NinjaService) { }
 
@@ -22,7 +22,15 @@ export class ContactFormComponent implements OnInit {
 
   sendRequest() {
     this.ninjaService.sendContactRequest(this.contact)
-      .then(success => alert('You\'re contact message has been sent.'));
+      .then(success => {
+        alert('You\'re contact message has been sent.');
+        this.cleanForm();
+      })
+  }
+
+  cleanForm() : void {
+    this.contact = { name: '', email: '', subject: '', message: '', captchaResponse: '' };
+    this.reCaptcha.reset();
   }
 
   resolved(captchaResponse: string) {
@@ -31,7 +39,7 @@ export class ContactFormComponent implements OnInit {
       return;
     }
 
-    this.submitButton = false;
+    this.submitButton = true;
     this.contact.captchaResponse = captchaResponse;
   }
 

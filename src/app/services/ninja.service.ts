@@ -21,7 +21,7 @@ export class NinjaService {
       alert(error.error);
 
     console.log(error);
-    return Promise.reject(error.message || error);
+    return Promise.reject(error || error);
   }
 
   sendContactRequest(contactModel: ContactModel) {
