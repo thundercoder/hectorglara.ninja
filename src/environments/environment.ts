@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  restApi: 'http://localhost:3000/api'
+  restApi: 'http://localhost:3000/api',
+  siteKeyGoogle: '6Ld7ohkUAAAAADa-62di3UNh6yHe-XbA2HSngtQb'
 };

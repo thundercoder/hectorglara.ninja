@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ContactModel } from '../../models/contact-model'
 
 import { NinjaService } from '../../services/ninja.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-contact-form',
@@ -10,8 +11,9 @@ import { NinjaService } from '../../services/ninja.service';
 })
 export class ContactFormComponent implements OnInit {
 
-  public declarativeFormCaptchaValue: string;
+  @ViewChild('reCaptchaRef') reCaptcha: RecaptchaComponent;
   contact = new ContactModel();
+  submitButton: boolean = false;
 
   constructor(private ninjaService: NinjaService) { }
 
@@ -20,11 +22,24 @@ export class ContactFormComponent implements OnInit {
 
   sendRequest() {
     this.ninjaService.sendContactRequest(this.contact)
-      .then(success => alert('nice'));
+      .then(success => {
+        alert('You\'re contact message has been sent.');
+        this.cleanForm();
+      })
+  }
+
+  cleanForm() : void {
+    this.contact = { name: '', email: '', subject: '', message: '', captchaResponse: '' };
+    this.submitButton = false;
   }
 
   resolved(captchaResponse: string) {
-    console.log(`Resolved captcha with response ${captchaResponse}:`);
+    if (captchaResponse === null) {
+      return;
+    }
+
+    this.submitButton = true;
+    this.contact.captchaResponse = captchaResponse;
   }
 
 }
