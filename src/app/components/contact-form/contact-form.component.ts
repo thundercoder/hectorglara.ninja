@@ -30,11 +30,11 @@ export class ContactFormComponent implements OnInit {
 
   cleanForm() : void {
     this.contact = { name: '', email: '', subject: '', message: '', captchaResponse: '' };
+    this.submitButton = false;
   }
 
   resolved(captchaResponse: string) {
     if (captchaResponse === null) {
-      this.reCaptcha.reset();
       return;
     }
 
