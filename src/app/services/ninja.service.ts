@@ -14,8 +14,14 @@ export class NinjaService {
   }
 
   private handleError(error: any, type: string, request?: any): Promise<any> {
-    console.error('An error occurred: ', error);
-    return Promise.reject(error.message || error);
+    if (error.status == 422)
+      alert(error.error[Object.keys(error.error)[0]].msg);
+
+    if (error.status == 400)
+      alert(error.error);
+
+    console.log(error);
+    return Promise.reject(error || error);
   }
 
   sendContactRequest(contactModel: ContactModel) {
@@ -27,6 +33,6 @@ export class NinjaService {
     return this.http.post(`${environment.restApi}/send-email`, contactModel, { headers: headers })
       .toPromise()
       .then(response => response)
-      .catch(err => this.handleError(err, 'GET'));
+      .catch(err => this.handleError(err, 'POST'));
   }
 }
