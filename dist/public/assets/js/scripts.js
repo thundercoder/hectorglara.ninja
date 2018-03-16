@@ -394,7 +394,3 @@ jQuery(function ($) {
 
 });
 
-
-
-
-

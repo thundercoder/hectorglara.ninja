@@ -29,11 +29,11 @@
         "./assets/css/responsive.css"
       ],
       "scripts": [
+        "assets/js/polyfill.js",
         "assets/js/jquery.js",
         "assets/bootstrap/js/bootstrap.min.js",
         "assets/js/jquery.stellar.min.js",
         "assets/js/jquery.sticky.js",
-        "assets/js/smoothscroll.js",
         "assets/js/wow.min.js",
         "assets/js/jquery.countTo.js",
         "assets/js/jquery.inview.min.js",

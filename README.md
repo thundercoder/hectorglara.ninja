@@ -1,32 +1,36 @@
-<<<<<<< HEAD
-# Hectorglara.Resume
+# hectorglara.ninja personal website
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.2.
+I created this website for learning purposes and manage some tools, such as:
 
-## Development server
+1.  Angular 5
+2.  Node JS / express
+3.  Nodemailer
+4.  Babeljs
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Installation
 
-## Code scaffolding
+Download to your project directory, add it, and commit.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```sh
+git clone https://github.com/thundercoder/hectorglara.ninja.git <<local-folder>>
+```
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+```
+npm run-script build-local 
+```
+or production
+```sh
+npm run-script build-prod
 
-## Running unit tests
+node bin/server
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Support
 
-## Running end-to-end tests
+Please open an issue to receive support for this project.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Contributing
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-=======
-# hectorglara.ninja
-my resume
->>>>>>> f15445578add77950b2bef1e6d11976176198bb2
+Fork the project, create a new branch, make your changes, and open a pull request.
