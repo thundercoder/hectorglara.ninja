@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { NinjaService } from './services/ninja.service';
 import { RecaptchaModule } from 'ng-recaptcha';
+import { DxLoadPanelModule } from 'devextreme-angular';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { RecaptchaModule } from 'ng-recaptcha';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RecaptchaModule.forRoot()
+    RecaptchaModule.forRoot(),
+    DxLoadPanelModule
   ],
   providers: [NinjaService],
   bootstrap: [AppComponent]

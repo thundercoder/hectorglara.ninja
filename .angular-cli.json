@@ -21,6 +21,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
+        "../node_modules/devextreme/dist/css/dx.common.css",
+        "../node_modules/devextreme/dist/css/dx.light.css",
         "./assets/bootstrap/css/bootstrap.min.css",
         "./assets/css/font-awesome.min.css",
         "./assets/css/animate.css",

@@ -1,25 +1,42 @@
-<form>
-  <div class="form-group">
-    <label>Name*</label>
-    <input type="text" class="form-control" [(ngModel)]="contact.name" [ngModelOptions]="{standalone: true}">
+<div>
+  <div id="contact">
+    <div class="form-group">
+      <label>Name*</label>
+      <input type="text" class="form-control" [(ngModel)]="contact.name" [ngModelOptions]="{standalone: true}">
+    </div>
+
+    <div class="form-group">
+      <label>Email*</label>
+      <input type="email" class="form-control" [(ngModel)]="contact.email" [ngModelOptions]="{standalone: true}">
+    </div>
+
+    <div class="form-group">
+      <label>Subject*</label>
+      <input type="text" class="form-control" [(ngModel)]="contact.subject" [ngModelOptions]="{standalone: true}">
+    </div>
+
+    <div class="form-group">
+      <label>Message*</label>
+      <textarea class="form-control" rows="5" [(ngModel)]="contact.message"
+                [ngModelOptions]="{standalone: true}"></textarea>
+    </div>
+
+    <re-captcha #reCaptchaRef (resolved)="resolved($event)"
+                siteKey="6Ld7ohkUAAAAADa-62di3UNh6yHe-XbA2HSngtQb"></re-captcha>
+
+    <button type="button" *ngIf="submitButton" (click)="sendRequest()" class="btn btn-primary">Send Message</button>
   </div>
 
-  <div class="form-group">
-    <label>Email*</label>
-    <input type="email" class="form-control" [(ngModel)]="contact.email" [ngModelOptions]="{standalone: true}">
-  </div>
+  <dx-load-panel
+    #loadPanel
+    shadingColor="rgba(0,0,0,0.4)"
+    [position]="{ of: '#contact' }"
+    [(visible)]="loadingVisible"
+    [showIndicator]="true"
+    [showPane]="true"
+    [shading]="true"
+    [closeOnOutsideClick]="false">
+  </dx-load-panel>
+</div>
 
-  <div class="form-group">
-    <label>Subject*</label>
-    <input type="text" class="form-control" [(ngModel)]="contact.subject" [ngModelOptions]="{standalone: true}">
-  </div>
 
-  <div class="form-group">
-    <label>Message*</label>
-    <textarea class="form-control" rows="5" [(ngModel)]="contact.message" [ngModelOptions]="{standalone: true}"></textarea>
-  </div>
-
-  <re-captcha #reCaptchaRef (resolved)="resolved($event)" siteKey="6Ld7ohkUAAAAADa-62di3UNh6yHe-XbA2HSngtQb"></re-captcha>
-
-  <button *ngIf="submitButton" type="button" (click)="sendRequest()" class="btn btn-primary">Send Message</button>
-</form>
