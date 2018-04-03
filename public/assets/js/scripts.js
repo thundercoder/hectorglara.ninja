@@ -319,15 +319,12 @@ jQuery(function ($) {
 
     });
 
-
-
-
     // -------------------------------------------------------------
     // Google Map
     // -------------------------------------------------------------
 
     (function () {
-        var myLatlng = new google.maps.LatLng(0,0);
+        var myLatlng = new google.maps.LatLng(40.9943,-73.9343);
 
             var styles = [
                 {
