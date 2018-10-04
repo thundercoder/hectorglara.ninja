@@ -4,6 +4,8 @@ import { ContactModel } from '../../models/contact-model'
 import { NinjaService } from '../../services/ninja.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
+import notify from 'devextreme/ui/notify';
+
 @Component({
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
@@ -14,6 +16,7 @@ export class ContactFormComponent implements OnInit {
   @ViewChild('reCaptchaRef') reCaptcha: RecaptchaComponent;
   contact = new ContactModel();
   submitButton: boolean = false;
+  loadingVisible: boolean = false;
 
   constructor(private ninjaService: NinjaService) { }
 
@@ -21,11 +24,20 @@ export class ContactFormComponent implements OnInit {
   }
 
   sendRequest() {
+    this.loadingVisible = true;
+
     this.ninjaService.sendContactRequest(this.contact)
       .then(success => {
-        alert('You\'re contact message has been sent.');
+        notify({
+          message: 'You\'re contact message has been sent.',
+          type: 'success',
+          displayTime: 1500
+        });
+
         this.cleanForm();
+        this.loadingVisible = false;
       })
+      .catch(err => this.loadingVisible = false);
   }
 
   cleanForm() : void {
