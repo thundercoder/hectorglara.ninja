@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ContactModel } from '../../models/contact-model'
+import { ContactModel } from '../../models/contact-model';
 
 import { NinjaService } from '../../services/ninja.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
